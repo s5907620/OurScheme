@@ -1,0 +1,43 @@
+﻿                    如何 (正確的) "抓下一個token"
+
+當scanner要去「真正的input」 "抓"「下一個token」時(不管是因為parser在向
+scanner要求下一個token還是whatever)，scanner應該如此做：
+
+  從下一個(尚未讀進來的(或是「已讀進來但尚未處理」的))字元開始
+  
+                       // 反正就是在概念上尚未處理到它的那個渾蛋字元
+                       
+  // 隨時要注意END-OF-FILE！！！！！！！！！！！！！！！！！！！！！！！！
+
+  一、跳過所有white-spaces、直到碰到「非white-space」(或END-OF-FILE)為止
+  
+  二、從那個「非white-space」開始 "繼續讀入"、直到碰到「separator-字元」為止
+  
+      (如果一開始的那個「非white-space」已經是個separator，
+       then you are already done(翻譯：別再讀了！)
+      )
+       
+      // 小心哪！後來碰到的那個「separator-字元」就是「已讀進來但尚未處理」！
+  
+  三、(此時你已讀入一個token了，問題只是「它是誰」而已！
+       所以現在(剩下)要做的是「判定」的工作)
+  
+      判定此token是啥！
+      
+      // 注意：「什麼都不是的」就是SYMBOL。
+  
+  工作完畢。
+
+  註：separator df= white-space OR '(' OR ')' OR single-quote ('\'')
+                                              OR double-quote ('\"')
+                                              OR ';'
+
+  加註一： '.'不是separator
+  
+  加註二： '.'可以是SYMBOL的一部分，'.'甚至可以是一個SYMBOL的開頭，
+  
+           但SYMBOL不能光是一個'.'。
+           
+           (如果光是一個'.'，那就是所謂的DOT、而不是symbol)
+
+
